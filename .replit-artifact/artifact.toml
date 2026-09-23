@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Invoice Finder"
+description = "A searchable invoice workspace that lets users filter the provided sales tax invoice PDF by client, invoice number, date, and amount, then print selected invoices together."
+version = "1.0.0"
+id = "artifacts/invoice-finder"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23481
+
+[services.development]
+run = "pnpm --filter @workspace/invoice-finder run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/invoice-finder", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/invoice-finder/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23481"
+BASE_PATH = "/"
